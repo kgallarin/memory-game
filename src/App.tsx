@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import Welcome from '@components/welcome';
 
 function App() {
-  return <> I am app.</>;
+  return <Welcome />;
 }
 
 export default App;

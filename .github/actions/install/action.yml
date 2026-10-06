@@ -1,0 +1,25 @@
+name: Install Deps
+
+author: kg
+
+description: install npm dependencies for memory-game
+
+inputs:
+  node-version:
+    description: Node.js version to use
+    required: true
+    default: '24'
+
+runs:
+  using: composite
+
+  steps:
+    - name: Setup Node
+      id: node-setup
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+
+    - run: npm ci
+      shell: bash

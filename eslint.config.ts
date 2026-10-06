@@ -7,7 +7,7 @@ import globals from 'globals';
 export default defineConfig([
   globalIgnores(['dist']),
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.{ts,tsx,js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,

@@ -7,6 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "tsc": "tsc --noEmit",
+    "ts:check": "npm run tsc && npm run lint",
+    "tsc:watch": "npx tsc --noEmit --watch",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -24,6 +27,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.6",
     "globals": "^17.12.0",
+    "jiti": "^2.7.0",
     "prettier": "^3.9.9",
     "typescript": "^7.0.2",
     "vite": "^8.3.0"

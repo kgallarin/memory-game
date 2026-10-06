@@ -1,0 +1,29 @@
+name: checks.yml
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+jobs:
+  ts-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/install
+        with:
+          node-version: '24'
+      - run: npm run tsc
+
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/install
+        with:
+          node-version: '24'
+      - run: npm run lint
