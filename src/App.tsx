@@ -5,9 +5,10 @@ import { shuffle } from 'lodash-es';
 
 import type { CardItem } from '@/types/card.ts';
 
-const CARD_SYMBOLS = ['🐶', '🐱', '🦊', '🐼', '🦁', '🐸', '🐵', '🦄'];
+import { EMOJI_CONTENTS } from '@/constants/card.constants';
+
 const generateShuffledCardBoard = (): CardItem[] => {
-  const duplicatedContent = [...CARD_SYMBOLS, ...CARD_SYMBOLS];
+  const duplicatedContent = [...EMOJI_CONTENTS, ...EMOJI_CONTENTS];
 
   return shuffle(duplicatedContent).map(
     (content: string, index: number): CardItem => ({

@@ -22,7 +22,8 @@
     "noUncheckedIndexedAccess": true, // checks undefined
     "noImplicitOverride": true,
     "skipLibCheck": true,
-    "allowJs": true
+    "allowJs": true,
+    "types": ["vitest/globals"]
   },
   "include": ["src/**/*", "prettier.config.ts"],
   "exclude": ["node_modules", "dist"]
