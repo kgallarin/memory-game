@@ -1,12 +1,12 @@
 import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'node:url';
+import { URL, fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@components': fileURLToPath(new URL('./src/components')),
+      '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
     },
   },
 });
