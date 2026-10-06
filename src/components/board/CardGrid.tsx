@@ -15,14 +15,21 @@ export const CardGrid = (): ReactNode => {
     cards,
     difficulty,
     elapsedTime,
+    bestScore,
     handleCardClick,
     changeDifficulty,
     resetGame,
   } = useMemoryGame();
   return (
     <div>
-      <div className={`${styles[`card-grid-time`]}`}>
-        <span>Time: {formatTime(elapsedTime)}</span>
+      <div className={`${styles[`card-grid-board`]}`}>
+        <div>Time: {formatTime(elapsedTime)}</div>
+        <div className={`${styles[`card-grid-board-best`]}`}>
+          🏆:{' '}
+          {bestScore
+            ? `${bestScore.moves} moves (${formatTime(bestScore.time)})`
+            : ''}
+        </div>
       </div>
       <div className={`${styles[`card-grid`]} ${styles[difficulty]}`}>
         {cards.map((card: CardItem): ReactNode => (

@@ -4,6 +4,7 @@ import type { CardItem } from '@/types/card.ts';
 import { DifficultyLevel } from '@/types/game.ts';
 
 import { DIFFICULTY_PRESETS } from '@/constants/game.constants';
+import { getStoredBestScores, saveBestScore } from '@/utils/best-score.utils.ts';
 import { generateShuffledCardBoard } from '@/utils/card.utils';
 
 export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') => {
@@ -24,6 +25,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [bestScores, setBestScores] = useState(getStoredBestScores);
 
   // Timer Effect: Tick every second while running
   useEffect((): (() => void) => {
@@ -42,6 +44,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
     };
   }, [isTimerRunning]);
 
+  // reset
   const resetGame = (newDifficulty: DifficultyLevel = difficulty): void => {
     if (isLoading) return;
     setIsLoading(true);
@@ -73,6 +76,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
     }, 400);
   };
 
+  // difficulty
   const changeDifficulty = (level: DifficultyLevel): void => {
     if (level === difficulty) return;
 
@@ -84,6 +88,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
     resetGame();
   }, []);
 
+  // card interaction
   const handleCardClick = (id: number) => {
     // prevent clicking same card
     if (isLoading || flippedCards.includes(id)) return;
@@ -106,6 +111,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
     // when two cards flipped, check match
     if (newFlippedCards.length === 2) {
       setIsLoading(true);
+      const nextMoves = moves + 1;
       setMoves((move: number): number => move + 1);
 
       const [firstCardId, secondCardId] = newFlippedCards;
@@ -129,6 +135,12 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
           const isGameWon = updatedCards.every((card) => card.hasMatched);
           if (isGameWon) {
             setIsTimerRunning(false);
+
+            const updatedBest = saveBestScore(difficulty, {
+              moves: nextMoves,
+              time: elapsedTime,
+            });
+            setBestScores(updatedBest);
           }
 
           return updatedCards;
@@ -159,6 +171,8 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
     isLoading,
     difficulty,
     elapsedTime,
+
+    bestScore: bestScores[difficulty],
     handleCardClick,
     changeDifficulty,
     resetGame: () => resetGame(difficulty),
