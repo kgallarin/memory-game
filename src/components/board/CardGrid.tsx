@@ -6,20 +6,24 @@ import { BoardControls } from '@components/controls/BoardControls.tsx';
 import { CardItem } from '@/types/card.ts';
 
 import { useMemoryGame } from '@/hooks/useMemoryGame.ts';
+import { formatTime } from '@/utils/timeFormatter.ts';
 
 import styles from './CardGrid.module.scss';
 
 export const CardGrid = (): ReactNode => {
-  const { cards, difficulty, moves, handleCardClick, changeDifficulty, resetGame } =
-    useMemoryGame();
+  const {
+    cards,
+    difficulty,
+    elapsedTime,
+    handleCardClick,
+    changeDifficulty,
+    resetGame,
+  } = useMemoryGame();
   return (
     <div>
-      <BoardControls
-        moves={moves}
-        difficulty={difficulty}
-        changeDifficulty={changeDifficulty}
-        resetGame={resetGame}
-      />
+      <div className={`${styles[`card-grid-time`]}`}>
+        <span>Time: {formatTime(elapsedTime)}</span>
+      </div>
       <div className={`${styles[`card-grid`]} ${styles[difficulty]}`}>
         {cards.map((card: CardItem): ReactNode => (
           <Card
@@ -32,6 +36,12 @@ export const CardGrid = (): ReactNode => {
           />
         ))}
       </div>
+
+      <BoardControls
+        difficulty={difficulty}
+        changeDifficulty={changeDifficulty}
+        resetGame={resetGame}
+      />
     </div>
   );
 };

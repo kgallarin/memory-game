@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { CardItem } from '@/types/card.ts';
 import { DifficultyLevel } from '@/types/game.ts';
@@ -6,7 +6,7 @@ import { DifficultyLevel } from '@/types/game.ts';
 import { DIFFICULTY_PRESETS } from '@/constants/game.constants';
 import { generateShuffledCardBoard } from '@/utils/card.utils';
 
-export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'hard') => {
+export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') => {
   const [difficulty, setDifficulty] = useState<DifficultyLevel>(
     initialDifficultyLevel
   );
@@ -18,17 +18,59 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'hard') 
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
 
   const [moves, setMoves] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Timer states
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Timer Effect: Tick every second while running
+  useEffect((): (() => void) => {
+    if (isTimerRunning) {
+      timerRef.current = setInterval(() => {
+        setElapsedTime((prev) => prev + 1);
+      }, 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    return (): void => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isTimerRunning]);
 
   const resetGame = (newDifficulty: DifficultyLevel = difficulty): void => {
-    const targetConfig = DIFFICULTY_PRESETS[newDifficulty];
-    setDifficulty(newDifficulty);
+    if (isLoading) return;
+    setIsLoading(true);
 
-    setCards(generateShuffledCardBoard(targetConfig.pairCount));
+    // 1. Immediately stop timer and clear active interval ref
+    setIsTimerRunning(false);
+    setElapsedTime(0);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
 
+    // setCards(generateShuffledCardBoard(targetConfig.pairCount));
+    setCards((prevCardsState: CardItem[]) =>
+      prevCardsState.map((card: CardItem) => ({
+        ...card,
+        isFlipped: false,
+        hasMatched: false,
+      }))
+    );
     setFlippedCards([]);
-    setMoves(0);
-    setIsProcessing(false);
+
+    setTimeout(() => {
+      const targetConfig = DIFFICULTY_PRESETS[newDifficulty];
+      setDifficulty(newDifficulty);
+      setCards(generateShuffledCardBoard(targetConfig.pairCount));
+      setMoves(0);
+      setIsLoading(false);
+    }, 400);
   };
 
   const changeDifficulty = (level: DifficultyLevel): void => {
@@ -44,7 +86,12 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'hard') 
 
   const handleCardClick = (id: number) => {
     // prevent clicking same card
-    if (isProcessing || flippedCards.includes(id)) return;
+    if (isLoading || flippedCards.includes(id)) return;
+
+    // timer starts
+    if (!isTimerRunning && moves === 0 && flippedCards.length === 0) {
+      setIsTimerRunning(true);
+    }
 
     const newFlippedCards = [...flippedCards, id];
     setFlippedCards(newFlippedCards);
@@ -58,7 +105,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'hard') 
 
     // when two cards flipped, check match
     if (newFlippedCards.length === 2) {
-      setIsProcessing(true);
+      setIsLoading(true);
       setMoves((move: number): number => move + 1);
 
       const [firstCardId, secondCardId] = newFlippedCards;
@@ -66,20 +113,29 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'hard') 
         (card: CardItem): boolean => card.id === firstCardId
       );
 
-      const secondCard = cards.find((card) => card.id === secondCardId);
+      const secondCard = cards.find(
+        (card: CardItem): boolean => card.id === secondCardId
+      );
 
       // matched
       if (firstCard && secondCard && firstCard.content === secondCard.content) {
-        setCards((previousCardState: CardItem[]) =>
-          previousCardState.map((card: CardItem) =>
+        setCards((previousCardState: CardItem[]) => {
+          const updatedCards = previousCardState.map((card: CardItem) =>
             card.id === firstCardId || card.id === secondCardId
               ? { ...card, hasMatched: true }
               : card
-          )
-        );
+          );
+
+          const isGameWon = updatedCards.every((card) => card.hasMatched);
+          if (isGameWon) {
+            setIsTimerRunning(false);
+          }
+
+          return updatedCards;
+        });
 
         setFlippedCards([]);
-        setIsProcessing(false);
+        setIsLoading(false);
       } else {
         setTimeout((): void => {
           setCards((previousCardState: CardItem[]): CardItem[] =>
@@ -91,7 +147,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'hard') 
           );
 
           setFlippedCards([]);
-          setIsProcessing(false);
+          setIsLoading(false);
         }, 1000);
       }
     }
@@ -100,9 +156,9 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'hard') 
   return {
     cards,
     moves,
-    isProcessing,
+    isLoading,
     difficulty,
-
+    elapsedTime,
     handleCardClick,
     changeDifficulty,
     resetGame: () => resetGame(difficulty),

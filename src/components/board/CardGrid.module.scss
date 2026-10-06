@@ -1,3 +1,5 @@
+@use "@/styles/variables";
+
 .card-grid {
   width: fit-content;
   width: -webkit-fit-content;
@@ -17,7 +19,14 @@
   }
 
   &-info {
-    margin-bottom: 16px;
+    margin-bottom: variables.$spacing-md;
     text-align: center;
+  }
+
+  &-time {
+    display: flex;
+    justify-content: center;
+    font-size: variables.$font-lg;
+    margin-bottom: variables.$spacing-lg;
   }
 }

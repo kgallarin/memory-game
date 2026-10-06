@@ -1,6 +1,8 @@
+@use "@/styles/mixins";
+@use "@/styles/variables";
+
 .card {
-  width: 80px;
-  height: 100px;
+  @include mixins.size(variables.$card-width, variables.$card-height);
   perspective: 1000px;
   background: transparent;
   border: none;

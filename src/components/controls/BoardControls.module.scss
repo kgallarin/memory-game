@@ -1,0 +1,16 @@
+@use "@/styles/variables";
+
+.controls {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  border-top: 1px solid #1f2028;
+
+  .difficulty-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: variables.$spacing-md;
+  }
+}
