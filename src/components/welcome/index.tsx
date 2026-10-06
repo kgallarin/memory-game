@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export const Welcome = (): ReactNode => {
-  const onStartGame = () => {};
+  const onStartGame = (): void => {};
 
   return (
     <>

@@ -16,30 +16,39 @@
   }
 
   // flipped
-  &.flipped {
-    .card-inner {
+  &.flipped &-inner  {
       transform: rotateY(180deg);
-    }
   }
 
-  &-front, &-back {
+  &-front,
+  &-back {
     position: absolute;
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden; // safari
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #1f2028;
   }
-  
+
+  &-front {
+    background-color: #fff;
+    color: #1f2028;
+  }
+
   &-back {
-    background-color: #edf2f4;
+    background-color: #f8f8f8;
     color: #fff;
+    transform: rotateY(180deg);
   }
-  
+
   &.matched {
     opacity: 0.6;
     cursor: default;

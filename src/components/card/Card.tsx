@@ -4,8 +4,6 @@ import type { CardItem } from '@/types/card';
 
 import styles from './Card.module.scss';
 
-// 1. Import module object
-
 export const Card = ({
   content,
   isFlipped,
@@ -21,7 +19,7 @@ export const Card = ({
       onClick={onClick}
     >
       <div className={styles['card-inner']}>
-        <div className={styles['card-front']}>:)</div>
+        <div className={styles['card-front']}>♢</div>
         <div className={styles['card-back']}>{content}</div>
       </div>
     </button>

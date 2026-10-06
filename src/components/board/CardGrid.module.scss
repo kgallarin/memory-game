@@ -1,0 +1,23 @@
+.card-grid {
+  width: fit-content;
+  width: -webkit-fit-content;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+  &.easy {
+      grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.medium {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  &.hard {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  &-info {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+}
