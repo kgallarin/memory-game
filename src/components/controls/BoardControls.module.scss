@@ -1,0 +1,27 @@
+@use "@/styles/variables";
+
+.controls {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  border-top: 1px solid #1f2028;
+  background-color: #fff;
+
+  .title {
+    font-size: variables.$font-sm;
+    margin-bottom: variables.$spacing-sm;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .difficulty-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: variables.$spacing-md;
+
+    @media (max-width: 400px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
