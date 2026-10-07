@@ -25,6 +25,8 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const isGameFinished = cards.length > 0 && cards.every((card) => card.hasMatched);
   const [bestScores, setBestScores] = useState(getStoredBestScores);
 
   // Timer Effect: Tick every second while running
@@ -83,11 +85,6 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
     resetGame(level);
   };
 
-  useEffect((): void => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    resetGame();
-  }, []);
-
   // card interaction
   const handleCardClick = (id: number) => {
     // prevent clicking same card
@@ -132,7 +129,7 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
               : card
           );
 
-          const isGameWon = updatedCards.every((card) => card.hasMatched);
+          const isGameWon = updatedCards.every((card: CardItem) => card.hasMatched);
           if (isGameWon) {
             setIsTimerRunning(false);
 
@@ -171,11 +168,11 @@ export const useMemoryGame = (initialDifficultyLevel: DifficultyLevel = 'easy') 
     isLoading,
     difficulty,
     elapsedTime,
-
+    isGameFinished,
     bestScore: bestScores[difficulty],
     handleCardClick,
     changeDifficulty,
-    resetGame: () => resetGame(difficulty),
+    resetGame: (): void => resetGame(difficulty),
     gridSize: DIFFICULTY_PRESETS[difficulty].gridSize,
   };
 };

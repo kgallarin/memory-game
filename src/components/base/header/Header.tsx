@@ -1,9 +1,13 @@
+import { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import styles from './Header.module.scss';
 
-export const Header = () => {
+export const Header = (): ReactNode => {
+  const navigate = useNavigate();
   return (
     <div className={styles['header-nav']}>
-      <div>Memory Game</div>
+      <div onClick={() => navigate('/')}>🧠 Memory Game</div>
     </div>
   );
 };

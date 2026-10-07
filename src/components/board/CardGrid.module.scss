@@ -2,10 +2,11 @@
 
 .card-grid {
   width: fit-content;
-  width: -webkit-fit-content;
   margin: 0 auto;
   display: grid;
-  gap: 16px;
+  gap: clamp(0.5rem, 2vw, 1.25rem);
+  transform-origin: center center;
+  padding-bottom: 150px;
   &.easy {
       grid-template-columns: repeat(2, 1fr);
   }
@@ -16,6 +17,18 @@
 
   &.hard {
     grid-template-columns: repeat(6, 1fr);
+
+    @media (max-width: 600px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 400px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 340px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   &-info {
@@ -32,7 +45,26 @@
     margin-bottom: variables.$spacing-lg;
 
     &-best {
-      font-size: variables.$font-sm;
+      font-size: variables.$font-md;
+    }
+  }
+
+  &-finished {
+    background-color: #f8f8f8;
+    border-top: 1px solid #2e303a;
+    border-bottom: 1px solid #2e303a;
+    padding: 10px 0;
+    width: 100%;
+    text-align: center;
+    margin-top: variables.$spacing-sm;
+    display: flex;
+    flex-direction: column;
+    gap: variables.$spacing-md;
+    font-size: variables.$font-sm;
+
+    .play-btn {
+      max-width: max-content;
+      margin: 0 auto;
     }
   }
 }

@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import { Button } from '@components/base/button/Button.tsx';
+import { Header } from '@components/base/header/Header.tsx';
 import { Card } from '@components/card/Card.tsx';
 import { BoardControls } from '@components/controls/BoardControls.tsx';
 
@@ -16,12 +18,15 @@ export const CardGrid = (): ReactNode => {
     difficulty,
     elapsedTime,
     bestScore,
+    moves,
+    isGameFinished,
     handleCardClick,
     changeDifficulty,
     resetGame,
   } = useMemoryGame();
   return (
     <div>
+      <Header />
       <div className={`${styles[`card-grid-board`]}`}>
         <div>Time: {formatTime(elapsedTime)}</div>
         <div className={`${styles[`card-grid-board-best`]}`}>
@@ -30,6 +35,25 @@ export const CardGrid = (): ReactNode => {
             ? `${bestScore.moves} moves (${formatTime(bestScore.time)})`
             : ''}
         </div>
+        {isGameFinished ? (
+          <>
+            <div className={`${styles[`card-grid-finished`]}`}>
+              <p>
+                🎉 You finished in {moves} moves and {elapsedTime} seconds!
+              </p>
+              <Button
+                size={'sm'}
+                className={`${styles['play-btn']}`}
+                onClick={resetGame}
+              >
+                {' '}
+                Play again{' '}
+              </Button>
+            </div>
+          </>
+        ) : (
+          ''
+        )}
       </div>
       <div className={`${styles[`card-grid`]} ${styles[difficulty]}`}>
         {cards.map((card: CardItem): ReactNode => (

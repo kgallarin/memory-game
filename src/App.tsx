@@ -1,14 +1,16 @@
 import { ReactNode } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import { Header } from '@components/base/header/Header.tsx';
 import { CardGrid } from '@components/board/CardGrid.tsx';
+import { Welcome } from '@components/welcome';
 
 export const App = (): ReactNode => {
-  // return <Welcome />;
   return (
     <>
-      <Header />
-      <CardGrid />
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/game" element={<CardGrid />} />
+      </Routes>
     </>
   );
 };

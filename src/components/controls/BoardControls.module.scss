@@ -6,11 +6,15 @@
   bottom: 0;
   padding: 10px;
   border-top: 1px solid #1f2028;
+  background-color: #fff;
 
   .difficulty-selector {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: variables.$spacing-md;
+
+    @media (max-width: 400px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }

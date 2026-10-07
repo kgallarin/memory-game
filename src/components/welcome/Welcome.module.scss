@@ -1,0 +1,49 @@
+@use "@/styles/variables";
+.welcome {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  background-color: #fafafa;
+
+  h2 {
+    font-size: 48px;
+    font-family: variables.$font-family-secondary;
+    font-weight: normal;
+  }
+
+  h3 {
+    font-size: variables.$font-lg;
+    font-family: variables.$font-family-tertiary;
+    font-weight: normal;
+  }
+
+  ul {
+    margin: variables.$spacing-lg auto;
+    li {
+      font-size: variables.$font-md;
+      font-weight: normal;
+      margin-bottom: 4px;
+    }
+  }
+
+  .content {
+    max-width: 100%;
+    width: 100%;
+    animation: fadeIn 0.8s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

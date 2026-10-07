@@ -26,7 +26,7 @@ export const BoardControls = ({
             <Button
               key={level}
               className={`${styles['difficulty-btn']} ${isActive ? styles.active : ''}`}
-              onClick={() => changeDifficulty(level)}
+              onClick={(): void => changeDifficulty(level)}
               disabled={isActive}
             >
               {config.label}
