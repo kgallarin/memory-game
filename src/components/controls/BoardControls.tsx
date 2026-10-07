@@ -16,6 +16,7 @@ export const BoardControls = ({
 }: BoardControlsProps): ReactNode => {
   return (
     <div className={styles['controls']}>
+      <p className={styles.title}>Game controls</p>
       <div className={styles['difficulty-selector']}>
         <Button onClick={resetGame}>restart</Button>
         {Object.entries(DIFFICULTY_PRESETS).map(([levelKey, config]) => {
