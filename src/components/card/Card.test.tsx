@@ -4,22 +4,25 @@ import { userEvent } from '@testing-library/user-event/dist/cjs/setup/index.js';
 
 import type { CardItem } from '@/types/card.ts';
 
-const renderComponent = (propsPartial?: Partial<CardItem>) => {
+const renderComponent = (
+  propsPartial?: Partial<CardItem> & { onClick?: (id: number) => void }
+) => {
   const user = userEvent.setup();
-  const onClick = vi.fn();
+  const defaultOnClick = vi.fn();
   const defaultCard: CardItem = {
     id: 1,
     content: '💀',
     isFlipped: false,
     hasMatched: false,
+    onClick: defaultOnClick,
     ...propsPartial,
   };
 
-  const utils = render(<Card {...defaultCard} onClick={onClick} />);
+  const utils = render(<Card {...defaultCard} />);
 
   return {
     user,
-    onClick,
+    onClick: defaultCard.onClick,
     ...utils,
   };
 };
@@ -35,5 +38,15 @@ describe('Card Component', (): void => {
     const { getByTestId } = renderComponent();
 
     expect(getByTestId('card')).toHaveTextContent('💀');
+  });
+  it.only('diplays card content when clicked', async (): Promise<void> => {
+    const handleCardClick = vi.fn();
+    const { user, getByTestId } = renderComponent({
+      onClick: handleCardClick,
+    });
+
+    await user.click(getByTestId('card'));
+
+    expect(handleCardClick).toHaveBeenCalledWith(1);
   });
 });

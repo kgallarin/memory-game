@@ -5,6 +5,7 @@ import type { CardItem } from '@/types/card';
 import styles from './Card.module.scss';
 
 export const Card = ({
+  id,
   content,
   isFlipped,
   hasMatched,
@@ -16,7 +17,7 @@ export const Card = ({
       className={`${styles.card} ${isFlipped ? styles.flipped : ''} ${hasMatched ? styles.matched : ''}`}
       disabled={isFlipped || hasMatched}
       aria-label="Card"
-      onClick={onClick}
+      onClick={() => onClick?.(id)}
     >
       <div className={styles['card-inner']}>
         <div className={styles['card-front']}>♢</div>

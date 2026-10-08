@@ -63,7 +63,7 @@ export const CardGrid = (): ReactNode => {
             content={card.content}
             isFlipped={card.isFlipped}
             hasMatched={card.hasMatched}
-            onClick={(): void => handleCardClick(card.id)}
+            onClick={handleCardClick}
           />
         ))}
       </div>

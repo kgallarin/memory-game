@@ -3,5 +3,5 @@ export interface CardItem {
   content: string;
   isFlipped: boolean;
   hasMatched: boolean;
-  onClick?: () => void;
+  onClick?: (id: number) => void;
 }

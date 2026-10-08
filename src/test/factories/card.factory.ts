@@ -48,3 +48,33 @@ export const createCards = (
     )
   );
 };
+
+export const createCardPairs = (
+  pairCount: number,
+  overrides?: DeepPartial<CardItem>
+): CardItem[] => {
+  const cards: CardItem[] = [];
+
+  for (let i = 0; i < pairCount; i++) {
+    const content = EMOJI_CONTENTS[i % EMOJI_CONTENTS.length];
+
+    // pair 1
+    cards.push(
+      createCard({
+        id: i * 2 + 1,
+        content,
+        ...overrides,
+      })
+    );
+
+    cards.push(
+      createCard({
+        id: i * 2 + 2,
+        content,
+        ...overrides,
+      })
+    );
+  }
+
+  return cards;
+};
