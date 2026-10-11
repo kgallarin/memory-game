@@ -4,25 +4,22 @@ import { userEvent } from '@testing-library/user-event/dist/cjs/setup/index.js';
 
 import type { CardItem } from '@/types/card.ts';
 
+import { createCard } from '@/test/factories/card.factory.ts';
+
 const renderComponent = (
+  initialCard: Partial<CardItem>,
   propsPartial?: Partial<CardItem> & { onClick?: (id: number) => void }
 ) => {
   const user = userEvent.setup();
-  const defaultOnClick = vi.fn();
-  const defaultCard: CardItem = {
-    id: 1,
-    content: '💀',
-    isFlipped: false,
-    hasMatched: false,
-    onClick: defaultOnClick,
-    ...propsPartial,
-  };
 
-  const utils = render(<Card {...defaultCard} />);
+  const defaultCard = createCard(initialCard);
+  const defaultOnClick = propsPartial?.onClick || vi.fn();
+
+  const utils = render(<Card {...defaultCard} onClick={defaultOnClick} />);
 
   return {
     user,
-    onClick: defaultCard.onClick,
+    onClick: defaultOnClick,
     ...utils,
   };
 };
@@ -35,13 +32,17 @@ describe('Card Component', (): void => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
   it('has correct content value', async (): Promise<void> => {
-    const { getByTestId } = renderComponent();
+    const card = createCard({
+      content: '💀',
+    });
+    const { getByTestId } = renderComponent(card);
 
     expect(getByTestId('card')).toHaveTextContent('💀');
   });
-  it.only('diplays card content when clicked', async (): Promise<void> => {
+  it('diplays card content when clicked', async (): Promise<void> => {
+    const card = createCard({ id: 1 });
     const handleCardClick = vi.fn();
-    const { user, getByTestId } = renderComponent({
+    const { user, getByTestId } = renderComponent(card, {
       onClick: handleCardClick,
     });
 
